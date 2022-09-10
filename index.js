@@ -108,19 +108,28 @@ function generaCarta(family = null, number = null) {
 }
 
 function bubbleSort(conjuntoDeCartas) {
+    console.log(conjuntoDeCartas)
     for (var i = 0; i < conjuntoDeCartas.length; i++) {
-        for (var j = 0; j < conjuntoDeCartas.length - i - 1; j++) {
-            if (conjuntoDeCartas[j].index > conjuntoDeCartas[j + 1].index) {
-                var temp = conjuntoDeCartas[j];
-                conjuntoDeCartas[j] = conjuntoDeCartas[j + 1];
-                conjuntoDeCartas[j + 1] = temp;
+        let min = 1;
+        for (var j = min; j < conjuntoDeCartas.length; j++) {
+            if (conjuntoDeCartas[min].index > conjuntoDeCartas[j].index) {
+                var temp = conjuntoDeCartas[min];
+                conjuntoDeCartas[min] = conjuntoDeCartas[j];
+                conjuntoDeCartas[j] = temp;
+
+
+            }
+            for (let i = 0; i < conjuntoDeCartas.length; i++) {
+                generaCarta(conjuntoDeCartas[i].suit, conjuntoDeCartas[i].value);
             }
         }
     }
-    for (let i = 0; i < conjuntoDeCartas.length; i++) {
-        generaCarta(conjuntoDeCartas[i].suit, conjuntoDeCartas[i].value);
-    }
+
+
+    //conjuntoDeCartas.forEach(element => generaCarta(conjuntoDeCartas[i].suit, conjuntoDeCartas[i].value))
+
 }
+
 
 function getRandom(list) {
     return Math.floor(Math.random() * list.length);
