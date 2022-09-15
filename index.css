@@ -1,0 +1,25 @@
+body{
+  background-color: green;   
+}
+
+#inputCantidadCartas {
+  width: 50px;
+}
+
+.laCarta{
+  background-color: white;
+  width: 50px;
+  height: 70px;
+  border-radius: 5px;
+  font-family: 'Times New Roman';
+}
+
+.pintaSuperior{
+  margin: 1px 0 0 1px;
+}
+.pintaInferior{
+  margin: 0 1px 1px 0;
+}
+.girar180grados{
+  transform: rotate(180deg)
+}

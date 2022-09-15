@@ -1,161 +1,131 @@
-//Se mejora el color y se separan los elementos que componen cada una de las cartas.
+let numeros = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
 
-//Variables
-const fila1 = document.querySelector("#mySection");
-const fila2 = document.querySelector("#mySection2");
-const numerosCartas = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]; //el As es el 14, no el primero (1)
-const pintas = ["♠", "♥", "♦", "♣"];
+let pinta = [
+    '<span >♠</span>',
+    '<span>♣</span>',
+    '<span class="text-danger">♦</span>',
+    '<span class="text-danger">♥</span>']
 
-const theInput = document.querySelector("input");
-const genera = document.querySelector("#draw");
-const BUBBLE = document.querySelector("#bubble");
+const laCarta = (arr) => {
 
-//Funcion para generar cartas
-function createCard(event) {
-    event.preventDefault();
-
-    //Reinicia la seccion donde se pintan las cartas (limpia-en blanco)
-    fila1.innerHTML = "";
-
-    //Array de objetos carta
-    let cards = [];
-
-    //Bucle para iterar sobre el valor del input
-    for (let i = 0; i < theInput.value; i++) {
-        cards.push(generaCarta());
-    }
-    return cards;
-}
-
-function generaCarta(family = null, number = null) {
-
-    //Crea un objeto carta
-    let card;
-
-    if (family == null || number == null) {
-        card = {
-            suit: pintas[getRandom(pintas)],
-            value: numerosCartas[getRandom(numerosCartas)],
-            index: null
-        };
-    } else {
-        card = {
-            suit: family,
-            value: number,
-            index: null
-        };
-    }
-
-    card.index = card.value;
-
-    //Reemplaza los numeros 11,12,13,14 por J,Q,K,A
-    if (card.value == 14) {
-        card.value = "A";
-    }
-    if (card.value == 11) {
-        card.value = "J";
-    }
-    if (card.value == 12) {
-        card.value = "Q";
-    }
-    if (card.value == 13) {
-        card.value = "K";
-    }
-
-    //Contiene la carta entera
-    let generaCarta = document.createElement("div");
-    generaCarta.classList.add("poker-card");
-
-    //Crea el icono de arriba
-    let firstSuitContainer = document.createElement("div");
-    let firstSuit = document.createTextNode(card.suit);
-    firstSuitContainer.appendChild(firstSuit);
-    firstSuitContainer.classList.add("align-start");
-    generaCarta.appendChild(firstSuitContainer);
-
-    //Crea el numero
-    let valueContainer = document.createElement("div");
-    let value = document.createTextNode(card.value);
-    valueContainer.classList.add("card-value");
-    valueContainer.appendChild(value);
-    generaCarta.appendChild(valueContainer);
-
-    //Crea el icono de abajo
-    let secondSuitContainer = document.createElement("div");
-    let secondSuit = document.createTextNode(card.suit);
-    secondSuitContainer.appendChild(secondSuit);
-    secondSuitContainer.classList.add("align-end");
-    secondSuitContainer.classList.add("invert");
-    generaCarta.appendChild(secondSuitContainer);
-
-    //Pinta rojo o negro dependiendo del suit
-    if (card.suit == "♥" || card.suit == "♦") {
-        firstSuitContainer.classList.add("red");
-        valueContainer.classList.add("red");
-        secondSuitContainer.classList.add("red");
-    } else {
-        firstSuitContainer.classList.add("black");
-        valueContainer.classList.add("black");
-        secondSuitContainer.classList.add("black");
-    }
-
-    if (family == null || number == null) {
-        fila1.appendChild(generaCarta);
-        return card;
-    } else {
-        fila2.appendChild(generaCarta);
-    }
-}
-
-function bubbleSort(conjuntoDeCartas) {
-    console.log(conjuntoDeCartas)
-    for (var i = 0; i < conjuntoDeCartas.length; i++) {
-        let min = 1;
-        for (var j = min; j < conjuntoDeCartas.length; j++) {
-            if (conjuntoDeCartas[min].index > conjuntoDeCartas[j].index) {
-                var temp = conjuntoDeCartas[min];
-                conjuntoDeCartas[min] = conjuntoDeCartas[j];
-                conjuntoDeCartas[j] = temp;
-
-
-            }
-            for (let i = 0; i < conjuntoDeCartas.length; i++) {
-                generaCarta(conjuntoDeCartas[i].suit, conjuntoDeCartas[i].value);
+    let arraytemp = [];
+    for (let i = 0; i <= arr.length - 1; i++) {
+        for (let j = 0; j <= numeros.length - 1; j++) {
+            let icon = pinta[Math.floor(Math.random() * pinta.length)];
+            if (arr[i] == j) {
+                let numeroCarta = []
+                arraytemp[i] = numeros[j];
+                numeroCarta.push(arraytemp[i], icon);
+                arraytemp[i] = numeroCarta
             }
         }
     }
-
-
-    //conjuntoDeCartas.forEach(element => generaCarta(conjuntoDeCartas[i].suit, conjuntoDeCartas[i].value))
-
+    return arraytemp;
 }
 
+let arrDraw = miConjunto = [];
 
-function getRandom(list) {
-    return Math.floor(Math.random() * list.length);
+const aleatorioDeCartas = (num) => {
+    let randomCards = [];
+
+    for (let i = 0; i < num; i++) {
+        let alAzar = Math.floor(Math.random() * numeros.length);
+        randomCards[i] = alAzar;
+    }
+
+    return randomCards;
 }
 
-window.onload = function () {
-    //Pintar el fondo de verde
-    fila1.classList.add("background");
-    fila2.classList.add("background");
-    let conjuntoDeCartas = [];
+document.getElementById('botonUno').addEventListener('click', () => {
+    let conjuntoAlAzar = aleatorioDeCartas(document.getElementById('inputCantidadCartas').value);
+    let drawArray = null;
+    let aleatorioDeck = document.querySelector("#aleatorioDeck");
+    document.querySelector("#cartasOrdenadas").innerHTML = "";
+    aleatorioDeck.innerHTML = "";
 
-    //Evento de Draw
-    genera.addEventListener("click", event => {
-        conjuntoDeCartas = createCard(event);
-        fila2.innerHTML = "";
-    });
+    for (let i = 0; i < conjuntoAlAzar.length; i++) {
+        drawArray = conjuntoAlAzar
+    }
+    arrDraw = drawArray;
 
-    //Evento de bubble sort
-    BUBBLE.addEventListener("click", event => {
-        fila2.innerHTML = "";
-        bubbleSort(conjuntoDeCartas);
-    });
+    let name = laCarta(arrDraw);
+    console.log(name);
 
-    //Evento de selection sort
-    SELECTION.addEventListener("click", event => {
-        fila2.innerHTML = "";
-        selectionSort(conjuntoDeCartas);
-    });
-};
+    for (let k = 0; k < arrDraw.length; k++) {
+
+        let cuerpoCarta = name[k][0]
+        let cardIcon = name[k][1]
+
+        let carta = document.createElement('div');
+
+        carta.classList.add(
+            "laCarta",
+            "d-flex",
+            "flex-column",
+            "justify-content-center",
+            "align-items-center",
+            "justify-content-between",
+            "m-2",);
+
+        carta.innerHTML =
+            `<div class="w-100">
+        <div class="pintaSuperior icon">${cardIcon}</div>
+        </div>            
+            <span class="display-7" id="cuerpoCarta">${cuerpoCarta}</span>              
+        <div class="w-100">
+        <div class="pintaInferior girar180grados icon">${cardIcon}</div></div>`;
+
+        aleatorioDeck.appendChild(carta)
+    }
+});
+
+document.getElementById('botonDos').addEventListener('click', () => {
+    let conjuntoAlAzar = arrDraw;
+    let cartasOrdenadas = document.querySelector("#cartasOrdenadas");
+    let contador = 0;
+    for (let i = 0; i < conjuntoAlAzar.length; i++) {
+        for (let j = 0; j < conjuntoAlAzar.length - 1; j++) {
+            if (conjuntoAlAzar[j] > conjuntoAlAzar[j + 1]) {
+                let temp = conjuntoAlAzar[j];
+                conjuntoAlAzar[j] = conjuntoAlAzar[j + 1];
+                conjuntoAlAzar[j + 1] = temp;
+
+                miConjunto = conjuntoAlAzar;
+
+                let name = laCarta(miConjunto);
+
+                let cartasFila = document.createElement('div');
+                cartasFila.classList.add("d-flex");
+                let index = document.createElement('span');
+                index.innerText = contador;
+                cartasFila.appendChild(index);
+                for (let k = 0; k < miConjunto.length; k++) {
+
+                    let cuerpoCarta = name[k][0]
+                    let cardIcon = name[k][1]
+
+                    let carta = document.createElement('div');
+                    carta.classList.add(
+                        "laCarta",
+                        "d-flex",
+                        "flex-column",
+                        "justify-content-center",
+                        "align-items-center",
+                        "justify-content-between",
+                        "m-1");
+
+                    carta.innerHTML = `<div class="w-100"><div class="pintaSuperior icon">${cardIcon}</div></div>            
+                            <span class="display-7" id="cuerpoCarta">${cuerpoCarta}</span>              
+                        <div class="w-100"><div class="pintaInferior girar180grados icon">${cardIcon}</div></div>`;
+                    cartasFila.appendChild(carta)
+
+                }
+                contador += 1;
+                cartasOrdenadas.appendChild(cartasFila)
+
+            }
+        }
+
+    }
+
+});
